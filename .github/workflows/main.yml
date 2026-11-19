@@ -20,9 +20,20 @@ jobs:
           echo "PS2DEV=$PS2DEV"
           echo "PS2SDK=$PS2SDK"
           echo "GSKIT=$GSKIT"
-          command -v ee-gcc
-          command -v make
-          test -f Makefile
+          echo "PATH=$PATH"
+
+          echo "Procurando compiladores:"
+          command -v ee-gcc || true
+          command -v mips64r5900el-ps2-elf-gcc || true
+
+          echo "Procurando make:"
+          command -v make || true
+
+          echo "Verificando diretorios:"
+          ls -la "$PS2DEV/bin" || true
+          ls -la "$PS2DEV/ee/bin" || true
+
+          echo "Diagnostico finalizado."
 
       - name: Compilar New Load PS2
         shell: sh
