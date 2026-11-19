@@ -85,15 +85,17 @@ jobs:
         run: |
           mkdir -p dist
 
-          ELF="$(find . -maxdepth 2 -type f -name '*.elf' -size +0c | head -n 1)"
-
-          if [ -z "$ELF" ]; then
-            echo "Nenhum ELF encontrado depois da compilacao"
+          if [ ! -s "opl.elf" ]; then
+            echo "ERRO: opl.elf nao foi encontrado na pasta principal."
+            echo "Arquivos ELF encontrados:"
+            find . -type f -iname '*.elf'
             exit 1
           fi
 
-          echo "Executavel encontrado: $ELF"
-          cp "$ELF" dist/NEWLOAD.ELF
+          echo "Executavel principal encontrado:"
+          ls -lh opl.elf
+
+          cp opl.elf dist/NEWLOAD.ELF
 
       - name: Disponibilizar ELF
         if: success()
