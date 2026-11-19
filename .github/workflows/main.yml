@@ -58,17 +58,25 @@ jobs:
           echo "Arquivos relacionados aos idiomas:"
           find . -iname '*lang*' -o -iname '*lng*'
 
-          echo "Scripts disponíveis:"
+          echo "Scripts disponiveis:"
           ls -la lng_pack.sh lng lng_tmpl 2>/dev/null || true
 
           echo "Referencias no Makefile:"
           grep -nE 'lang_autogen|lng_pack|lng|python' Makefile || true
 
-      - name: Compilar New Load PS2
+      - name: Preparar idiomas
         shell: sh
         run: |
           python3 generate_internal_language.py
+
+      - name: Configurar Git
+        shell: sh
+        run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Compilar New Load PS2
+        shell: sh
+        run: |
           make NOT_PACKED=1 LOCALVERSION=newload
 
       - name: Preparar executavel
@@ -76,11 +84,14 @@ jobs:
         shell: sh
         run: |
           mkdir -p dist
+
           ELF="$(find . -maxdepth 2 -type f -name '*.elf' -size +0c | head -n 1)"
+
           if [ -z "$ELF" ]; then
             echo "Nenhum ELF encontrado depois da compilacao"
             exit 1
           fi
+
           echo "Executavel encontrado: $ELF"
           cp "$ELF" dist/NEWLOAD.ELF
 
