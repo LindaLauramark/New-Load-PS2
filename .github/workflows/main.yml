@@ -1,0 +1,38 @@
+
+name: New Load PS2 - Diagnostico
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verificar-projeto:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar ferramentas basicas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make python3 git
+
+      - name: Verificar estrutura
+        run: |
+          echo "Verificando New Load PS2..."
+          test -f Makefile
+          test -d src
+          test -d include
+          echo "Estrutura principal encontrada."
+
+      - name: Verificar dependencias
+        run: |
+          echo "Procurando ferramentas PS2..."
+          for tool in ee-gcc iop-gcc; do
+            if command -v "$tool"; then
+              echo "$tool encontrado"
+            else
+              echo "$tool precisa ser instalado"
+            fi
+          done
+          echo "Diagnostico concluido."
