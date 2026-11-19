@@ -1,38 +1,46 @@
 
-name: New Load PS2 - Diagnostico
+name: New Load PS2 - Build
 
 on:
   workflow_dispatch:
 
 jobs:
-  verificar-projeto:
+  build:
     runs-on: ubuntu-latest
+    container:
+      image: ps2dev/ps2dev:latest
 
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v4
 
-      - name: Instalar ferramentas basicas
+      - name: Verificar ferramentas PS2
+        shell: sh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y make python3 git
-
-      - name: Verificar estrutura
-        run: |
-          echo "Verificando New Load PS2..."
+          echo "PS2DEV=$PS2DEV"
+          echo "PS2SDK=$PS2SDK"
+          echo "GSKIT=$GSKIT"
+          command -v ee-gcc
+          command -v make
           test -f Makefile
-          test -d src
-          test -d include
-          echo "Estrutura principal encontrada."
 
-      - name: Verificar dependencias
+      - name: Compilar New Load PS2
+        shell: sh
         run: |
-          echo "Procurando ferramentas PS2..."
-          for tool in ee-gcc iop-gcc; do
-            if command -v "$tool"; then
-              echo "$tool encontrado"
-            else
-              echo "$tool precisa ser instalado"
-            fi
-          done
-          echo "Diagnostico concluido."
+          make NOT_PACKED=1 LOCALVERSION=newload
+
+      - name: Preparar executavel
+        if: success()
+        shell: sh
+        run: |
+          test -s opl.elf
+          mkdir -p dist
+          cp opl.elf dist/NEWLOAD.ELF
+
+      - name: Disponibilizar ELF
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: New-Load-PS2-Teste
+          path: dist/NEWLOAD.ELF
+          if-no-files-found: error
