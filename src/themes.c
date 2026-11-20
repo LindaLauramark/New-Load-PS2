@@ -2374,9 +2374,9 @@ static void drawPS5Launcher(struct menu_list *menu, struct submenu_list *item, s
             currentBgG += ((float)bgG - currentBgG) * 0.10f;
             currentBgB += ((float)bgB - currentBgB) * 0.10f;
 
-            gPS5BgColorR = (u8)currentBgR;
-            gPS5BgColorG = (u8)currentBgG;
-            gPS5BgColorB = (u8)currentBgB;
+            gPS5BgColorR = 0;
+            gPS5BgColorG = 65;
+            gPS5BgColorB = 160;
 
             const char *fullTitle = submenuItemGetText(&item->item);
             fntRenderString(gPS5TitleFont, 50, 316, ALIGN_LEFT, 0, 0, fullTitle, GS_SETREG_RGBA(0xFF, 0xFF, 0xFF, 0x80));
