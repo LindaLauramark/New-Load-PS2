@@ -1300,7 +1300,19 @@ u8 gPS5BgColorB = 16;
 void guiDrawBGPlasma()
 {
     if (gPS5Mode) {
-        rmDrawRectPrecise(0, 0, screenWidth, screenHeight, GS_SETREG_RGBA(0, 0, 0, 0x80));
+        // New Load PS2: gradiente azul, escuro no topo e azul na base.
+        // As cores sao definidas no themes.c.
+        const int bands = 48;
+        int band;
+        for (band = 0; band < bands; band++) {
+            int y0 = (screenHeight * band) / bands;
+            int y1 = (screenHeight * (band + 1)) / bands;
+            int red = (gPS5BgColorR * band) / (bands - 1);
+            int green = (gPS5BgColorG * band) / (bands - 1);
+            int blue = (gPS5BgColorB * band) / (bands - 1);
+            rmDrawRectPrecise(0, y0, screenWidth, y1 - y0,
+                              GS_SETREG_RGBA(red, green, blue, 0x80));
+        }
         return;
     }
 
