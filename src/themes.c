@@ -888,7 +888,7 @@ static void initPS5MaskTextures(void)
 
     // 2. Load embedded roboto_bold.ttf into Header and Title fonts
     gPS5HeaderFont = fntLoadFileMem(&roboto_bold_raw, size_roboto_bold_raw, 20);
-    gPS5TitleFont = fntLoadFileMem(&roboto_bold_raw, size_roboto_bold_raw, 34);
+    gPS5TitleFont = fntLoadFileMem(&roboto_bold_raw, size_roboto_bold_raw, 25);
     gPS5BoldFont = gPS5HeaderFont; // Compatibility fallback
     if (gPS5HeaderFont != -1 && gPS5TitleFont != -1) {
         LOG("THEMES Loaded PS5 bold header (20) and title (34) fonts from embedded roboto_bold\n");
@@ -2067,7 +2067,7 @@ static void drawPS5Launcher(struct menu_list *menu, struct submenu_list *item, s
 
     // New Load PS2: compact identity, keeping the original navigation and loading logic.
     // Drawn in the existing font to avoid allocating another texture in GS memory.
-    fntRenderString(gPS5RegFont, screenWidth / 2, 12, ALIGN_CENTER, 0.48f, 0.48f, "NEW LOAD PS2", GS_SETREG_RGBA(0xB8, 0xA0, 0xFF, 0x60));
+    fntRenderString(gPS5HeaderFont, screenWidth / 2, 12, ALIGN_CENTER, 0.65f, 0.65f, "NEW LOAD  PS2", GS_SETREG_RGBA(0xFF, 0xFF, 0xFF, 0x70));
 
     // Header Navigation (Top Left & Top Right)
     if (gPS5ActiveTab == 0) {
